@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        charset="UTF-8">
+    <title>计算题</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+  
+</head>
+
+<body>
+  <div id="app">
+    <h1 class="title">计算题</h1>
+    <el-radio-group v-model="way" style="display: flex;justify-content: center;margin: 10px 0;" @change="changeWay">
+        <el-radio v-for="item in wayList" :key="item.id" :label="item.id">{{ item.name }}</el-radio>
+    </el-radio-group>
+    <el-radio-group v-model="addRadio" style="display: flex;justify-content: center;margin: 10px 0;" @change="changeAddRange">
+        <el-radio v-for="item in addOption" :key="item.id" :label="item.id">{{ item.name }}</el-radio>
+    </el-radio-group>
+    <div style="text-align: right;">
+        <el-button type="text" class="el-icon-refresh" @click="refreshAdd">刷新</el-button>
+        <el-button type="text" class="el-icon-view" @click="showAddAnswer">显示答案</el-button>
+    </div>
+    <div class="wrap" >
+        <div style="width: 50%;" v-for="(item, index) in addList" :key="index">
+            <div class="wrap-left">
+                {{ item.add1 }} 
+                <span v-if="way === 1"> + </span>
+                <span v-if="way === 2"> - </span> 
+                <span v-if="way === 3"> x </span> 
+                {{ item.add2 }} = 
+                <span v-if="addAnswer && way === 1" class="answer">{{ item.add1 + item.add2 }}</span>
+                <span v-if="addAnswer && way === 2" class="answer">{{ item.add1 - item.add2 }}</span>
+                <span v-if="addAnswer && way === 3" class="answer">{{ item.add1 * item.add2 }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">—————    到底啦  —————</div>
+  </div>
+</body>
+
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            way: 1,
+            wayList: [
+                {
+                    id: 1,
+                    name: '加法',
+                },
+                {
+                    id: 2,
+                    name: '减法',
+                },
+                {
+                    id: 3,
+                    name: '乘法',
+                }
+            ],
+            addRadio: 100,
+            addOption: [
+                {
+                    id: 100,
+                    name: '100以内',
+                },
+                {
+                    id: 1000,
+                    name: '1000以内',
+                },
+                {
+                    id: 10000,
+                    name: '10000以内',
+                }
+            ],
+            addList: [],
+            addAnswer: false
+        },
+        mounted() {
+            this.refreshAdd()
+        },
+        methods: {
+            refreshAdd() {
+                this.addAnswer = false
+                this.addList = []
+                for (let i = 0; i < 50; i++) {
+                    let add1 = Math.floor(Math.random() * this.addRadio)
+                    let add2 = Math.floor(Math.random() * this.addRadio)
+                    if (this.way === 2) {
+                        if (add1 > add2) {
+                            this.addList.push({
+                                add1,
+                                add2
+                            })
+                        }
+                    } else {
+                        this.addList.push({
+                            add1,
+                            add2
+                        })
+                    }
+                }
+            },
+            changeWay() {
+                this.refreshAdd()
+            },
+            changeAddRange() {
+                this.refreshAdd()
+            },
+            showAddAnswer() {
+                this.addAnswer = true
+            }
+        }
+    })
+</script>
+
+<style>
+    #app {
+        padding: 10px 30px;
+    }
+    .wrap {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .title {
+        text-align: center;
+    }
+
+    .wrap, .wrap-left {
+        text-align: center
+    }
+    .answer {
+        color: red;
+    }
+    .bottom {
+        text-align: center;
+        margin: 20px 0;
+    }
+</style>
+
+
+</html>
