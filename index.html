@@ -21,8 +21,17 @@
     <el-radio-group v-model="way" style="display: flex;justify-content: center;margin: 10px 0;" @change="changeWay">
         <el-radio v-for="item in wayList" :key="item.id" :label="item.id">{{ item.name }}</el-radio>
     </el-radio-group>
-    <el-radio-group v-model="addRadio" style="display: flex;justify-content: center;margin: 10px 0;" @change="changeAddRange">
+    <div v-if="way === 1">加数：</div>
+    <div v-if="way === 2">被减数：</div>
+    <div v-if="way === 3">乘数：</div>
+    <el-radio-group v-model="addRadio" style="display: flex;margin: 10px 0;" @change="changeAddRange">
         <el-radio v-for="item in addOption" :key="item.id" :label="item.id">{{ item.name }}</el-radio>
+    </el-radio-group>
+    <div v-if="way === 1">加数：</div>
+    <div v-if="way === 2">减数：</div>
+    <div v-if="way === 3">乘数：</div>
+    <el-radio-group v-model="addRadioOther" style="display: flex;margin: 10px 0;" @change="changeAddRange">
+        <el-radio v-for="item in addOptionOther" :key="item.id" :label="item.id">{{ item.name }}</el-radio>
     </el-radio-group>
     <div style="text-align: right;">
         <el-button type="text" class="el-icon-refresh" @click="refreshAdd">刷新</el-button>
@@ -66,6 +75,7 @@
                 }
             ],
             addRadio: 100,
+            addRadioOther: 10,
             addOption: [
                 {
                     id: 100,
@@ -80,6 +90,20 @@
                     name: '10000以内',
                 }
             ],
+            addOptionOther: [
+                {
+                    id: 10,
+                    name: '10以内',
+                },
+                {
+                    id: 100,
+                    name: '100以内',
+                },
+                {
+                    id: 1000,
+                    name: '1000以内',
+                },
+            ],
             addList: [],
             addAnswer: false
         },
@@ -92,7 +116,7 @@
                 this.addList = []
                 for (let i = 0; i < 50; i++) {
                     let add1 = Math.floor(Math.random() * this.addRadio)
-                    let add2 = Math.floor(Math.random() * this.addRadio)
+                    let add2 = Math.floor(Math.random() * this.addRadioOther)
                     if (this.way === 2) {
                         if (add1 > add2) {
                             this.addList.push({
